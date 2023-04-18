@@ -36,6 +36,9 @@ android {
     packagingOptions {
         exclude 'META-INF/atomicfu.kotlin_module'
     }
+    buildFeatures{
+        viewBinding true
+    }
 }
 
 dependencies {

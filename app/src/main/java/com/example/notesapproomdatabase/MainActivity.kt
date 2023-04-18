@@ -9,25 +9,23 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.notesapproomdatabase.adapter.NoteRVAdapter
+import com.example.notesapproomdatabase.databinding.ActivityMainBinding
 import com.example.notesapproomdatabase.model.Note
 import com.example.notesapproomdatabase.util.NoteViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : AppCompatActivity(), NoteRVAdapter.NoteClickInterface {
-    lateinit var noteRV: RecyclerView
-    lateinit var addFAB: FloatingActionButton
     lateinit var viewModel: NoteViewModel
+    lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        noteRV = findViewById(R.id.idRVNotes)
-        addFAB = findViewById(R.id.idFABAddNote)
-
-        noteRV.layoutManager = LinearLayoutManager(this)
+        binding.idRVNotes.layoutManager = LinearLayoutManager(this)
 
         val noteRVAdapter = NoteRVAdapter(this, this, this)
-        noteRV.adapter = noteRVAdapter
+        binding.idRVNotes.adapter = noteRVAdapter
         viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(application)).get(
             NoteViewModel::class.java)
         viewModel.allNotes.observe(this, Observer {list->
@@ -35,7 +33,7 @@ class MainActivity : AppCompatActivity(), NoteRVAdapter.NoteClickInterface {
                 noteRVAdapter.updateList(it)
             }
         })
-        addFAB.setOnClickListener {
+        binding.idFABAddNote.setOnClickListener {
             val intent= Intent(this, AddEditNote::class.java)
             startActivity(intent)
             this.finish()
@@ -54,6 +52,5 @@ class MainActivity : AppCompatActivity(), NoteRVAdapter.NoteClickInterface {
         intent.putExtra("noteDescription", note.noteDescription)
         intent.putExtra("noteID", note.id)
         startActivity(intent)
-        this.finish()
     }
 }
